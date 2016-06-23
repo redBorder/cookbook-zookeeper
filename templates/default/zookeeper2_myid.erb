@@ -1,0 +1,5 @@
+<% if @zookeeper2_virtual %>
+255
+<% else %>
+<%= @manager_index.nil? ? 200 : ( 200 + @manager_index + 1 ) %>
+<% end %>

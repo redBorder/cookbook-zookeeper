@@ -1,0 +1,38 @@
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+# 
+#    http://www.apache.org/licenses/LICENSE-2.0
+# 
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# the directory where the snapshot is stored.
+dataDir=<%= @data_dir %>
+clientPort=<%= @port %>
+tickTime=2000
+initLimit=5
+syncLimit=2
+forceSync=no
+autopurge.snapRetainCount=5
+autopurge.purgeInterval=24
+maxClientCnxns=0
+<% @managers.each_with_index do |m, index| %>
+<% if !m.name.nil? and !m["redBorder"].nil? and !m["redBorder"]["manager"].nil? and !m["redBorder"]["manager"]["services"].nil? and !m["redBorder"]["manager"]["services"]["current"].nil? and m["redBorder"]["manager"]["services"]["current"]["zookeeper"] %>
+server.<%= index+1 %>=<%= m.name %>:2888:3888
+<% end %>
+<% end %>
+<% if @zookeeper2_virtual %>
+server.255=<%= node["redBorder"]["manager"]["network"]["internal"]["zookeeper2"]["ip"] %>:2889:3889
+<% else %>
+<% @managers.each_with_index do |m, index| %>
+<% if !m.name.nil? and !m["redBorder"].nil? and !m["redBorder"]["manager"].nil? and !m["redBorder"]["manager"]["services"].nil? and !m["redBorder"]["manager"]["services"]["current"].nil? and m["redBorder"]["manager"]["services"]["current"]["zookeeper2"] %>
+server.<%= index+201 %>=<%= m.name %>:2889:3889
+<% end %>
+<% end %>
+<% end %>
