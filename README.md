@@ -19,7 +19,10 @@ Install and configure zookeeper and zookeeper2 in a redborder environment
 5. Run the tests, ensuring they all pass
 6. Submit a Pull Request using Github
 
-## License and Authors
+## License 
+GNU AFFERO GENERAL PUBLIC LICENSE
+Version 3, 19 November 2007
 
+## Authors
 Authors: Enrique Jimenez <ejimenez@redborder.com>
 
