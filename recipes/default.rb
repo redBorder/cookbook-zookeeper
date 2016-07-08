@@ -7,4 +7,7 @@
 # AFFERO GENERAL PUBLIC LICENSE V3
 #
 
+zookeeper_config "Zookeeper config"do 
+  action :add
+end
 

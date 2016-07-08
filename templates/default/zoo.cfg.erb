@@ -27,12 +27,4 @@ maxClientCnxns=0
 server.<%= index+1 %>=<%= m.name %>:2888:3888
 <% end %>
 <% end %>
-<% if @zookeeper2_virtual %>
-server.255=<%= node["redBorder"]["manager"]["network"]["internal"]["zookeeper2"]["ip"] %>:2889:3889
-<% else %>
-<% @managers.each_with_index do |m, index| %>
-<% if !m.name.nil? and !m["redBorder"].nil? and !m["redBorder"]["manager"].nil? and !m["redBorder"]["manager"]["services"].nil? and !m["redBorder"]["manager"]["services"]["current"].nil? and m["redBorder"]["manager"]["services"]["current"]["zookeeper2"] %>
-server.<%= index+201 %>=<%= m.name %>:2889:3889
-<% end %>
-<% end %>
-<% end %>
+

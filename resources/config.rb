@@ -12,6 +12,6 @@ attribute :user, :kind_of => String, :default => "zookeeper"
 attribute :group, :kind_of => String, :default => "zookeeper"
 attribute :datadir, :kind_of => String, :default => "/tmp/zookeeper"
 attribute :zk_hosts, :kind_of => Array, :default => ["localhost"]
-attribute :managers, :kind_of => Array, :default => ["localhost"]
+attribute :managers, :kind_of => Object, :default => [{"name" => "localhost", "services" = ["zookeeper"]}]
 attribute :port, :kind_of => Fixnum, :default => 2181
 
