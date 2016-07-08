@@ -14,6 +14,10 @@ action :add do
     zk_hosts = new_resource.zk_hosts
     managers = new_resource.managers
 
+    package "zookeeper" do
+      action :install
+    end
+
     user user do
       action :create
       system true
