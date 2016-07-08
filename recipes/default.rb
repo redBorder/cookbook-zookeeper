@@ -2,7 +2,9 @@
 # Cookbook Name:: zookeeper
 # Recipe:: default
 #
-# Copyright 2016, redborder
+# Redborder, 2016
 #
-# All rights reserved - Do Not Redistribute
+# AFFERO GENERAL PUBLIC LICENSE V3
 #
+
+

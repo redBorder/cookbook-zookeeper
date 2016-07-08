@@ -1,6 +1,6 @@
 # Cookbook Name:: Zookeeper
 #
-# Resource:: zk_config
+# Resource:: config
 #
 
 actions :add, :remove

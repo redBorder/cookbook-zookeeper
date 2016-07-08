@@ -1,26 +1,30 @@
 # Cookbook Name:: zookeeper
 #
-# Provider:: zk2_config
+# Provider:: config
 #
 
 action :add do
   begin
     memory = new_resource.memory
     logdir = new_resource.logdir
+    datadir = new_resource.datadir
     user = new_resource.user
     group = new_resource.group
+    port = new_resource.port
     zk_hosts = new_resource.zk_hosts
     managers = new_resource.managers
-    datadir = new_resource.datadir
-    port = new_resource.port
- 
+
+    package "zookeeper" do
+      action :install
+    end
+
     user user do
       action :create
       system true
     end
 
-    service "zookeeper2" do
-      service_name "zookeeper2"
+    service "zookeeper" do
+      service_name "zookeeper"
       ignore_failure true
       supports :status => true, :reload => true, :restart => true, :enable => true
     end
@@ -31,10 +35,10 @@ action :add do
       mode 0770
       action :create
     end
-
-    directory "/etc/zookeeper2" do
-      owner user
-      group group
+    
+    directory "/etc/zookeeper" do
+      owner "zookeeper"
+      group "zookeeper"
       mode 0770
       action :create
     end
@@ -47,44 +51,46 @@ action :add do
       action :create
     end
 
-    template "/etc/zookeeper2/zoo.cfg" do
+    template "/etc/zookeeper/zoo.cfg" do
         source "zoo.cfg.erb"
         owner "root"
         group "root"
         mode 0644
         retries 2
-#        notifies :restart, "service[zookeeper2]", :delayed if (manager_services["zookeeper2"] and (!zookeeper2_virtual or zookeeper2_running))
+#        notifies :restart, "service[zookeeper]", :delayed if manager_services["zookeeper"]
         variables(:managers => managers, :zk_hosts => zk_hosts, :data_dir => datadir, :port => port )
     end
 
-    template "/etc/zookeeper2/log4j.properties" do
-        source "zookeeper2_log4j.properties.erb"
+    template "/etc/zookeeper/log4j.properties" do
+        source "zookeeper_log4j.properties.erb"
         owner "root"
         group "root"
         mode 0644
-#        notifies :restart, "service[zookeeper2]", :delayed if (manager_services["zookeeper2"] and (!zookeeper2_virtual or zookeeper2_running))
+        retries 2
+       # notifies :restart, "service[zookeeper]", :delayed if manager_services["zookeeper"]
     end
-    template "/etc/sysconfig/zookeeper2" do
-      source "zookeeper2_sysconfig.erb"
+
+    template "/etc/sysconfig/zookeeper" do
+      source "zookeeper_sysconfig.erb"
       owner "root"
       group "root"
       mode 0644
       retries 2
-      #variables(:memory => memory_services[x])
-      #notifies :restart, "service[#{x}]", :delayed if manager_services[x]
+   #   variables(:memory => memory_services[x])
+    #  notifies :restart, "service[#{x}]", :delayed if manager_services[x]
     end
 
     template "#{datadir}/myid" do
-        source "zookeeper2_myid.erb"
+        source "zookeeper_myid.erb"
         owner user
         group group
         mode 0644
-        #variables(:manager_index => manager_index, :zookeeper2_virtual => zookeeper2_virtual )
-        #notifies :restart, "service[zookeeper2]", :delayed if (manager_services["zookeeper2"] and (!zookeeper2_virtual or zookeeper2_running))
+        #variables(:manager_index => manager_index )
+        #notifies :restart, "service[zookeeper]", :delayed if manager_services["zookeeper"]
         #notifies :run, "execute[force_chef_client_wakeup]", :delayed
     end
 
-    template "/etc/zookeeper2.list" do
+    template "/etc/zookeeper.list" do
       source "managers.list.erb"
       owner "root"
       group "root"
@@ -96,7 +102,7 @@ action :add do
       #notifies :restart, "service[nprobe]", :delayed if manager_services["nprobe"]
     end
 
-    Chef::Log.info("Zookeeper2 has been configured correctly.")
+    Chef::Log.info("Zookeeper has been configured correctly.")
   rescue => e
     Chef::Log.error(e.message)
   end
