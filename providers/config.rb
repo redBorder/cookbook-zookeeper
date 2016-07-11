@@ -13,6 +13,12 @@ action :add do
     port = new_resource.port
     zk_hosts = new_resource.zk_hosts
     managers = new_resource.managers
+    memory = new_resource.memory
+    classpath = new_resource.classpath
+    log4j = new_resource.log4j
+    jvmflags = new_resource.jvmflags
+    zoomain = new_resource.zoomain
+    zoocfg = new_resource.zoocfg
 
     package "zookeeper" do
       action :install
@@ -57,7 +63,7 @@ action :add do
         group "root"
         mode 0644
         retries 2
-#        notifies :restart, "service[zookeeper]", :delayed if manager_services["zookeeper"]
+        notifies :restart, "service[zookeeper]"
         variables(:managers => managers, :zk_hosts => zk_hosts, :data_dir => datadir, :port => port )
     end
 
@@ -67,7 +73,7 @@ action :add do
         group "root"
         mode 0644
         retries 2
-       # notifies :restart, "service[zookeeper]", :delayed if manager_services["zookeeper"]
+        notifies :restart, "service[zookeeper]"
     end
 
     template "/etc/sysconfig/zookeeper" do
@@ -76,8 +82,15 @@ action :add do
       group "root"
       mode 0644
       retries 2
-   #   variables(:memory => memory_services[x])
-    #  notifies :restart, "service[#{x}]", :delayed if manager_services[x]
+      variables(:memory => memory, :classpath => classpath, :zoomain => zoomain, :log4j => log4j, :jvmflags => jvmflags, :zoocfg => zoocfg)
+      notifies :restart, "service[zookeeper]"
+    end
+
+    #getting zk index
+    if managers.include?(node.name)
+      zk_index = managers.index(node.name) + 1
+    else
+      zk_index = 254
     end
 
     template "#{datadir}/myid" do
@@ -85,8 +98,8 @@ action :add do
         owner user
         group group
         mode 0644
-        #variables(:manager_index => manager_index )
-        #notifies :restart, "service[zookeeper]", :delayed if manager_services["zookeeper"]
+        variables(:zk_index => zk_index )
+        notifies :restart, "service[zookeeper]"
         #notifies :run, "execute[force_chef_client_wakeup]", :delayed
     end
 
@@ -96,7 +109,7 @@ action :add do
       group "root"
       mode 0644
       retries 2
-      #variables(:managers => managers_per_service["zookeeper"])
+      variables(:managers => managers)
       #notifies :restart, "service[rb-sociald]", :delayed if manager_services["rb-sociald"]
       #notifies :restart, "service[nmspd]", :delayed if manager_services["nmspd"]
       #notifies :restart, "service[nprobe]", :delayed if manager_services["nprobe"]

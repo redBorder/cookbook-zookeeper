@@ -22,9 +22,7 @@ forceSync=no
 autopurge.snapRetainCount=5
 autopurge.purgeInterval=24
 maxClientCnxns=0
-<% @managers.each_with_index do |m, index| %>
-<% if !m.name.nil? and !m["redBorder"].nil? and !m["redBorder"]["manager"].nil? and !m["redBorder"]["manager"]["services"].nil? and !m["redBorder"]["manager"]["services"]["current"].nil? and m["redBorder"]["manager"]["services"]["current"]["zookeeper"] %>
-server.<%= index+1 %>=<%= m.name %>:2888:3888
-<% end %>
+<% @managers.each_with_index do |mgr, index| %>
+server.<%= index+1 %>=<%= mgr %>:2888:3888
 <% end %>
 
