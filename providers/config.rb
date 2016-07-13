@@ -5,6 +5,7 @@
 
 action :add do
   begin
+    cbk_name = new_resource.cbk_name
     memory = new_resource.memory
     logdir = new_resource.logdir
     datadir = new_resource.datadir
@@ -62,7 +63,7 @@ action :add do
         owner "root"
         group "root"
         mode 0644
-        retries 2
+        cookbook cbk_name
         notifies :restart, "service[zookeeper]"
         variables(:managers => managers, :zk_hosts => zk_hosts, :data_dir => datadir, :port => port )
     end
@@ -72,7 +73,7 @@ action :add do
         owner "root"
         group "root"
         mode 0644
-        retries 2
+        cookbook cbk_name
         notifies :restart, "service[zookeeper]"
     end
 
@@ -81,7 +82,7 @@ action :add do
       owner "root"
       group "root"
       mode 0644
-      retries 2
+      cookbook cbk_name
       variables(:memory => memory, :classpath => classpath, :zoomain => zoomain, :log4j => log4j, :jvmflags => jvmflags, :zoocfg => zoocfg)
       notifies :restart, "service[zookeeper]"
     end
@@ -98,6 +99,7 @@ action :add do
         owner user
         group group
         mode 0644
+        cookbook cbk_name
         variables(:zk_index => zk_index )
         notifies :restart, "service[zookeeper]"
         #notifies :run, "execute[force_chef_client_wakeup]", :delayed
@@ -108,7 +110,7 @@ action :add do
       owner "root"
       group "root"
       mode 0644
-      retries 2
+      cookbook cbk_name
       variables(:managers => managers)
       #notifies :restart, "service[rb-sociald]", :delayed if manager_services["rb-sociald"]
       #notifies :restart, "service[nmspd]", :delayed if manager_services["nmspd"]

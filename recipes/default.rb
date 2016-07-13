@@ -8,6 +8,7 @@
 #
 
 zookeeper_config "Zookeeper config"do 
+  logdir node["zookeeper"]["logdir"] 
   action :add
 end
 
