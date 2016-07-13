@@ -123,3 +123,49 @@ action :add do
   end
 end
 
+
+action :remove do
+  begin
+    logdir = new_resource.logdir
+    datadir = new_resource.datadir
+    user = new_resource.user
+    group = new_resource.group
+
+    service "zookeeper" do
+      service_name "zookeeper"
+      supports :status => true, :stop => true
+      action :stop
+    end
+
+    dir_list = [
+      datadir,
+      logdir,
+      "/etc/zookeeper"
+    ] 
+
+    file_list = [
+      "/etc/zookeeper/zoo.cfg",
+      "/etc/zookeeper/log4j.properties",
+      "/etc/sysconfig/zookeeper",
+      "#{datadir}/myid",
+      "/etc/zookeeper.list"
+    ]
+
+    dir_list.each do |dir|
+      directory dir do
+        recursive true
+        action :delete
+      end
+    end
+
+    file_list.each do |file__tmp|
+      file file_tmp do
+        action :delete
+      end
+    end
+
+    Chef::Log.info("Zookeeper has been removed correctly.")
+  rescue => e
+    Chef::Log.error(e.message)
+  end
+end
