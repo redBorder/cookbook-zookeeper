@@ -12,8 +12,7 @@ action :add do
     user = new_resource.user
     group = new_resource.group
     port = new_resource.port
-    zk_hosts = new_resource.zk_hosts
-    managers = new_resource.managers
+    hosts = new_resource.hosts
     memory = new_resource.memory
     classpath = new_resource.classpath
     log4j = new_resource.log4j
@@ -65,7 +64,7 @@ action :add do
         mode 0644
         cookbook cbk_name
         notifies :restart, "service[zookeeper]"
-        variables(:managers => managers, :zk_hosts => zk_hosts, :data_dir => datadir, :port => port )
+        variables(:hosts => hosts, :data_dir => datadir, :port => port )
     end
 
     template "/etc/zookeeper/log4j.properties" do
@@ -88,8 +87,8 @@ action :add do
     end
 
     #getting zk index
-    if managers.include?(node.name)
-      zk_index = managers.index(node.name) + 1
+    if hosts.include?(node.name)
+      zk_index = hosts.index(node.name) + 1
     else
       zk_index = 254
     end
@@ -100,23 +99,23 @@ action :add do
         group group
         mode 0644
         cookbook cbk_name
+        retries 2
         variables(:zk_index => zk_index )
         notifies :restart, "service[zookeeper]"
         #notifies :run, "execute[force_chef_client_wakeup]", :delayed
     end
 
     template "/etc/zookeeper.list" do
-      source "managers.list.erb"
+      source "hosts.list.erb"
       owner "root"
       group "root"
       mode 0644
       cookbook cbk_name
-      variables(:managers => managers)
+      variables(:hosts => hosts)
       #notifies :restart, "service[rb-sociald]", :delayed if manager_services["rb-sociald"]
       #notifies :restart, "service[nmspd]", :delayed if manager_services["nmspd"]
       #notifies :restart, "service[nprobe]", :delayed if manager_services["nprobe"]
     end
-
     Chef::Log.info("Zookeeper has been configured correctly.")
   rescue => e
     Chef::Log.error(e.message)
@@ -158,7 +157,7 @@ action :remove do
       end
     end
 
-    file_list.each do |file__tmp|
+    file_list.each do |file_tmp|
       file file_tmp do
         action :delete
       end

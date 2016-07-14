@@ -22,7 +22,7 @@ forceSync=no
 autopurge.snapRetainCount=5
 autopurge.purgeInterval=24
 maxClientCnxns=0
-<% @managers.each_with_index do |mgr, index| %>
+<% @hosts.each_with_index do |mgr, index| %>
 server.<%= index+1 %>=<%= mgr %>:2888:3888
 <% end %>
 

@@ -12,8 +12,7 @@ attribute :logdir, :kind_of => String, :default => "/var/log/zookeeper"
 attribute :user, :kind_of => String, :default => "zookeeper"
 attribute :group, :kind_of => String, :default => "zookeeper"
 attribute :datadir, :kind_of => String, :default => "/tmp/zookeeper"
-attribute :zk_hosts, :kind_of => Array, :default => ["localhost"]
-attribute :managers, :kind_of => Array, :default => [node.name]
+attribute :hosts, :kind_of => Array, :default => [node.name]
 attribute :port, :kind_of => Fixnum, :default => 2181
 attribute :memory, :kind_of => Fixnum, :default => 524288
 attribute :classpath, :kind_of => String, :default => ""
