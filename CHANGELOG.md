@@ -1,7 +1,10 @@
 # zookeeper CHANGELOG
 
+## 0.0.4
+- [ejimenez] - Fixed duplicated memory attribute definition
+
 ## 0.0.3
-- [ejimenez] - changed managers by hosts
+- [ejimenez] - Changed managers by hosts
 
 ## 0.0.2
 - [ejimenez] - Added "remove" option in provider

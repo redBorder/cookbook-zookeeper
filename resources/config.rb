@@ -7,7 +7,6 @@ actions :add, :remove
 default_action :add
 
 attribute :cbk_name, :kind_of => String, :default => "zookeeper"
-attribute :memory, :kind_of => String, :default => "512"
 attribute :logdir, :kind_of => String, :default => "/var/log/zookeeper"
 attribute :user, :kind_of => String, :default => "zookeeper"
 attribute :group, :kind_of => String, :default => "zookeeper"
