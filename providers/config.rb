@@ -20,8 +20,9 @@ action :add do
     zoomain = new_resource.zoomain
     zoocfg = new_resource.zoocfg
 
-    package "zookeeper" do
-      action :install
+    yum_package "zookeeper" do
+      action :upgrade
+      flush_cache [:before]
     end
 
     user user do
@@ -161,6 +162,11 @@ action :remove do
       file file_tmp do
         action :delete
       end
+    end
+
+    # removing package   
+    yum_package 'zookeeper' do
+      action :remove
     end
 
     Chef::Log.info("Zookeeper has been removed correctly.")
