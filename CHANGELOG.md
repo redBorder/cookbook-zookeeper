@@ -1,5 +1,8 @@
 # zookeeper CHANGELOG
 
+## 0.0.5
+- [cjmateos] - Change package resource by yum_resource
+
 ## 0.0.4
 - [ejimenez] - Fixed duplicated memory attribute definition
 
