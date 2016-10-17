@@ -42,7 +42,7 @@ action :add do
       mode 0770
       action :create
     end
-    
+
     directory "/etc/zookeeper" do
       owner "zookeeper"
       group "zookeeper"
@@ -141,7 +141,7 @@ action :remove do
       datadir,
       logdir,
       "/etc/zookeeper"
-    ] 
+    ]
 
     file_list = [
       "/etc/zookeeper/zoo.cfg",
@@ -164,7 +164,7 @@ action :remove do
       end
     end
 
-    # removing package   
+    # removing package
     yum_package 'zookeeper' do
       action :remove
     end
@@ -172,5 +172,44 @@ action :remove do
     Chef::Log.info("Zookeeper has been removed correctly.")
   rescue => e
     Chef::Log.error(e.message)
+  end
+end
+
+action :register do
+  begin
+    if !node["zookeeper"]["registered"]
+      query = {}
+        query["ID"] = "zookeeper-#{node["hostname"]}"
+        query["Name"] = "zookeeper"
+        query["Address"] = "#{node["ipaddress"]}"
+        query["Port"] = 2181
+        json_query = Chef::JSONCompat.to_json(query)
+
+        execute 'Register service in consul' do
+            command "curl http://localhost:8500/v1/agent/service/register -d '#{json_query}' &>/dev/null"
+            action :nothing
+        end.run_action(:run)
+
+        node.set["zookeeper"]["registered"] = true
+    end
+
+    Chef::Log.info("Zookeeper service has been registered to consul")
+  rescue => e
+    Chef::Log.error(e.message)
+  end
+end
+
+action :deregister do
+  begin
+    if node["zookeeper"]["registered"]
+      execute 'Deregister service in consul' do
+        command "curl http://localhost:8500/v1/agent/service/deregister/zookeeper-#{node["hostname"]} &>/dev/null"
+        action :nothing
+      end.run_action(:run)
+
+      node.set["zookeeper"]["registered"] = false
+    end
+  rescue => e
+    Chef::Log.info("Zookeeper has been deregistered to consul")
   end
 end

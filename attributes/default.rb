@@ -11,3 +11,5 @@ default["zookeeper"]["log4j"] = "-Dlog4j.configuration=file:///etc/zookeeper/log
 default["zookeeper"]["jvmflags"] = ""
 default["zookeeper"]["zoomain"] = "-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.local.only=false org.apache.zookeeper.server.quorum.QuorumPeerMain"
 default["zookeeper"]["zoocfg"] = "/etc/zookeeper/zoo.cfg"
+
+default["zookeeper"]["registered"] = false
