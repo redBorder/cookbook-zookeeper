@@ -3,7 +3,7 @@
 # Resource:: config
 #
 
-actions :add, :remove
+actions :add, :remove, :register, :deregister
 default_action :add
 
 attribute :cbk_name, :kind_of => String, :default => "zookeeper"
@@ -19,4 +19,3 @@ attribute :log4j, :kind_of => String, :default => "-Dlog4j.configuration=file://
 attribute :jvmflags, :kind_of => String, :default => ""
 attribute :zoomain, :kind_of => String, :default => "-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.local.only=false org.apache.zookeeper.server.quorum.QuorumPeerMain"
 attribute :zoocfg, :kind_of => String, :default => "/etc/zookeeper/zoo.cfg"
-
