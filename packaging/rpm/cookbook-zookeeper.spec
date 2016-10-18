@@ -19,7 +19,7 @@ Source0: %{name}-%{version}.tar.gz
 %install
 mkdir -p %{buildroot}/var/chef/cookbooks/zookeeper
 cp -f -r  resources/* %{buildroot}/var/chef/cookbooks/zookeeper/
-chmod -r 0755 %{buildroot}/var/chef/cookbooks/zookeeper
+chmod -R 0755 %{buildroot}/var/chef/cookbooks/zookeeper
 
 %pre
 
