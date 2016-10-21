@@ -117,7 +117,7 @@ action :add do
       #notifies :restart, "service[nmspd]", :delayed if manager_services["nmspd"]
       #notifies :restart, "service[nprobe]", :delayed if manager_services["nprobe"]
     end
-    Chef::Log.info("Zookeeper has been configured correctly.")
+    Chef::Log.info("Zookeeper cookbook has been processed")
   rescue => e
     Chef::Log.error(e.message)
   end
@@ -169,7 +169,7 @@ action :remove do
       action :remove
     end
 
-    Chef::Log.info("Zookeeper has been removed correctly.")
+    Chef::Log.info("Zookeeper cookbook has been processed")
   rescue => e
     Chef::Log.error(e.message)
   end
