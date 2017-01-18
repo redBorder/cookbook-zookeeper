@@ -151,23 +151,23 @@ action :remove do
       "/etc/zookeeper.list"
     ]
 
-    dir_list.each do |dir|
-      directory dir do
-        recursive true
-        action :delete
-      end
-    end
+    #dir_list.each do |dir|
+    #  directory dir do
+    #    recursive true
+    #    action :delete
+    #  end
+    #end
 
-    file_list.each do |file_tmp|
-      file file_tmp do
-        action :delete
-      end
-    end
+    #file_list.each do |file_tmp|
+    #  file file_tmp do
+    #    action :delete
+    #  end
+    #end
 
-    # removing package
-    yum_package 'zookeeper' do
-      action :remove
-    end
+    ## removing package
+    #yum_package 'zookeeper' do
+    #  action :remove
+    #end
 
     Chef::Log.info("Zookeeper cookbook has been processed")
   rescue => e
