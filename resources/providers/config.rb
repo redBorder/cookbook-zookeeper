@@ -34,6 +34,7 @@ action :add do
       service_name "zookeeper"
       ignore_failure true
       supports :status => true, :reload => true, :restart => true, :enable => true
+      action [:enable,:start]
     end
 
     directory logdir do
@@ -134,7 +135,7 @@ action :remove do
     service "zookeeper" do
       service_name "zookeeper"
       supports :status => true, :stop => true
-      action :stop
+      action [:disable,:stop]
     end
 
     dir_list = [
