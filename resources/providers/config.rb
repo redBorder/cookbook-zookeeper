@@ -114,7 +114,6 @@ action :add do
       mode 0644
       cookbook cbk_name
       variables(:hosts => hosts)
-      #notifies :restart, "service[rb-sociald]", :delayed if manager_services["rb-sociald"]
       #notifies :restart, "service[nmspd]", :delayed if manager_services["nmspd"]
       #notifies :restart, "service[nprobe]", :delayed if manager_services["nprobe"]
     end
