@@ -20,7 +20,7 @@ action :add do
     zoomain = new_resource.zoomain
     zoocfg = new_resource.zoocfg
 
-    yum_package "zookeeper" do
+    dnf_package "zookeeper" do
       action :upgrade
       flush_cache [:before]
     end
@@ -165,7 +165,7 @@ action :remove do
     #end
 
     ## removing package
-    #yum_package 'zookeeper' do
+    #dnf_package 'zookeeper' do
     #  action :remove
     #end
 
