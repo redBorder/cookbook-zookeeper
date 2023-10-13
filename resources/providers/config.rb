@@ -190,7 +190,7 @@ action :register do
             action :nothing
         end.run_action(:run)
 
-        node.set["zookeeper"]["registered"] = true
+        node.default["zookeeper"]["registered"] = true
     end
 
     Chef::Log.info("Zookeeper service has been registered to consul")
@@ -207,7 +207,7 @@ action :deregister do
         action :nothing
       end.run_action(:run)
 
-      node.set["zookeeper"]["registered"] = false
+      node.default["zookeeper"]["registered"] = false
     end
   rescue => e
     Chef::Log.info("Zookeeper has been deregistered to consul")
