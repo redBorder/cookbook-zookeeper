@@ -20,14 +20,15 @@ action :add do
     zoomain = new_resource.zoomain
     zoocfg = new_resource.zoocfg
 
-    yum_package "zookeeper" do
+    dnf_package "zookeeper" do
       action :upgrade
       flush_cache [:before]
     end
 
-    user user do
-      action :create
-      system true
+    execute "create_user" do
+      command "/usr/sbin/useradd -r #{user}"
+      ignore_failure true
+      not_if "getent passwd #{user}"
     end
 
     service "zookeeper" do
@@ -114,7 +115,6 @@ action :add do
       mode 0644
       cookbook cbk_name
       variables(:hosts => hosts)
-      #notifies :restart, "service[rb-sociald]", :delayed if manager_services["rb-sociald"]
       #notifies :restart, "service[nmspd]", :delayed if manager_services["nmspd"]
       #notifies :restart, "service[nprobe]", :delayed if manager_services["nprobe"]
     end
@@ -166,7 +166,7 @@ action :remove do
     #end
 
     ## removing package
-    #yum_package 'zookeeper' do
+    #dnf_package 'zookeeper' do
     #  action :remove
     #end
 
@@ -191,7 +191,7 @@ action :register do
             action :nothing
         end.run_action(:run)
 
-        node.set["zookeeper"]["registered"] = true
+        node.normal["zookeeper"]["registered"] = true
     end
 
     Chef::Log.info("Zookeeper service has been registered to consul")
@@ -208,7 +208,7 @@ action :deregister do
         action :nothing
       end.run_action(:run)
 
-      node.set["zookeeper"]["registered"] = false
+      node.normal["zookeeper"]["registered"] = false
     end
   rescue => e
     Chef::Log.info("Zookeeper has been deregistered to consul")
