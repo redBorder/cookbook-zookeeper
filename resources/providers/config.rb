@@ -19,6 +19,7 @@ action :add do
     jvmflags = new_resource.jvmflags
     zoomain = new_resource.zoomain
     zoocfg = new_resource.zoocfg
+    ipaddress = new_resource.ipaddress
 
     dnf_package "zookeeper" do
       action :upgrade
@@ -131,6 +132,7 @@ action :remove do
     datadir = new_resource.datadir
     user = new_resource.user
     group = new_resource.group
+    ipaddress = new_resource.ipaddress
 
     service "zookeeper" do
       service_name "zookeeper"
@@ -177,12 +179,14 @@ action :remove do
 end
 
 action :register do
+  ipaddress = new_resource.ipaddress
+
   begin
     if !node["zookeeper"]["registered"]
       query = {}
         query["ID"] = "zookeeper-#{node["hostname"]}"
         query["Name"] = "zookeeper"
-        query["Address"] = "#{node["ipaddress"]}"
+        query["Address"] = ipaddress
         query["Port"] = 2181
         json_query = Chef::JSONCompat.to_json(query)
 
@@ -201,6 +205,8 @@ action :register do
 end
 
 action :deregister do
+  ipaddress = new_resource.ipaddress
+
   begin
     if node["zookeeper"]["registered"]
       execute 'Deregister service in consul' do
