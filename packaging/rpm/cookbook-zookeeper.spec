@@ -45,6 +45,8 @@ esac
 %doc
 
 %changelog
+* Fri Dec 15 2023 David Vanhoucke <dvanhoucke@redborder.com> - 1.0.3-1
+- add support for ip sync
 * Fri Jan 20 2022 David Vanhoucke <dvanhoucke@redborder.com> - 1.0.2-1
 - enable service zookeeper
 * Fri Jan 07 2022 David Vanhoucke <dvanhoucke@redborder.com> - 1.0.1-1
