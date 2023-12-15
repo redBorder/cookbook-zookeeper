@@ -19,3 +19,4 @@ attribute :log4j, :kind_of => String, :default => "-Dlog4j.configuration=file://
 attribute :jvmflags, :kind_of => String, :default => ""
 attribute :zoomain, :kind_of => String, :default => "-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.local.only=false org.apache.zookeeper.server.quorum.QuorumPeerMain"
 attribute :zoocfg, :kind_of => String, :default => "/etc/zookeeper/zoo.cfg"
+attribute :ipaddress, :kind_of => String, :default => "127.0.0.1"
