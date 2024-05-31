@@ -1,13 +1,9 @@
-#
-# Cookbook Name:: zookeeper
+# Cookbook:: zookeeper
 # Recipe:: default
-#
-# Redborder, 2016
-#
-# AFFERO GENERAL PUBLIC LICENSE V3
-#
+# Copyright:: 2024, redborder
+# License:: Affero General Public License, Version 3
 
-zookeeper_config "Zookeeper config" do 
-  logdir node["zookeeper"]["logdir"]
+zookeeper_config 'Zookeeper config' do
+  logdir node['zookeeper']['logdir']
   action :add
 end
