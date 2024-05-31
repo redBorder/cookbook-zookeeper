@@ -17,7 +17,6 @@ action :add do
     jvmflags = new_resource.jvmflags
     zoomain = new_resource.zoomain
     zoocfg = new_resource.zoocfg
-    ipaddress = new_resource.ipaddress
 
     dnf_package 'zookeeper' do
       action :upgrade
@@ -60,22 +59,22 @@ action :add do
     end
 
     template '/etc/zookeeper/zoo.cfg' do
-        source 'zoo.cfg.erb'
-        owner 'root'
-        group 'root'
-        mode '0644'
-        cookbook cbk_name
-        notifies :restart, 'service[zookeeper]'
-        variables(hosts: hosts, data_dir: datadir, port: port)
+      source 'zoo.cfg.erb'
+      owner 'root'
+      group 'root'
+      mode '0644'
+      cookbook cbk_name
+      notifies :restart, 'service[zookeeper]'
+      variables(hosts: hosts, data_dir: datadir, port: port)
     end
 
     template '/etc/zookeeper/log4j.properties' do
-        source 'zookeeper_log4j.properties.erb'
-        owner 'root'
-        group 'root'
-        mode '0644'
-        cookbook cbk_name
-        notifies :restart, 'service[zookeeper]'
+      source 'zookeeper_log4j.properties.erb'
+      owner 'root'
+      group 'root'
+      mode '0644'
+      cookbook cbk_name
+      notifies :restart, 'service[zookeeper]'
     end
 
     template '/etc/sysconfig/zookeeper' do
@@ -104,7 +103,7 @@ action :add do
       retries 2
       variables(zk_index: zk_index )
       notifies :restart, 'service[zookeeper]'
-      #notifies :run, "execute[force_chef_client_wakeup]", :delayed
+      # notifies :run, "execute[force_chef_client_wakeup]", :delayed
     end
 
     template '/etc/zookeeper.list' do
@@ -114,8 +113,8 @@ action :add do
       mode '0644'
       cookbook cbk_name
       variables(hosts: hosts)
-      #notifies :restart, "service[nmspd]", :delayed if manager_services["nmspd"]
-      #notifies :restart, "service[nprobe]", :delayed if manager_services["nprobe"]
+      # notifies :restart, "service[nmspd]", :delayed if manager_services["nmspd"]
+      # notifies :restart, "service[nprobe]", :delayed if manager_services["nprobe"]
     end
     Chef::Log.info('Zookeeper cookbook has been processed')
   rescue => e
@@ -126,10 +125,6 @@ end
 
 action :remove do
   begin
-    logdir = new_resource.logdir
-    datadir = new_resource.datadir
-    user = new_resource.user
-    group = new_resource.group
     ipaddress = new_resource.ipaddress
 
     service 'zookeeper' do
@@ -138,9 +133,9 @@ action :remove do
       action [:disable, :stop]
     end
 
-    dir_list = %w(datadir logdir /etc/zookeeper)
+    # dir_list = %w(datadir logdir /etc/zookeeper)
 
-    file_list = %w(/etc/zookeeper/zoo.cfg /etc/zookeeper/log4j.properties /etc/sysconfig/zookeeper "#{datadir}/myid" /etc/zookeeper.list)
+    # file_list = %w(/etc/zookeeper/zoo.cfg /etc/zookeeper/log4j.properties /etc/sysconfig/zookeeper #{datadir}/myid /etc/zookeeper.list)
 
     # dir_list.each do |dir|
     #   directory dir do
