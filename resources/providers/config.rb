@@ -1,7 +1,5 @@
-# Cookbook Name:: zookeeper
-#
+# Cookbook:: zookeeper
 # Provider:: config
-#
 
 action :add do
   begin
@@ -21,76 +19,76 @@ action :add do
     zoocfg = new_resource.zoocfg
     ipaddress = new_resource.ipaddress
 
-    dnf_package "zookeeper" do
+    dnf_package 'zookeeper' do
       action :upgrade
       flush_cache [:before]
     end
 
-    execute "create_user" do
+    execute 'create_user' do
       command "/usr/sbin/useradd -r #{user}"
       ignore_failure true
       not_if "getent passwd #{user}"
     end
 
-    service "zookeeper" do
-      service_name "zookeeper"
+    service 'zookeeper' do
+      service_name 'zookeeper'
       ignore_failure true
-      supports :status => true, :reload => true, :restart => true, :enable => true
-      action [:enable,:start]
+      supports status: true, reload: true, restart: true, enable: true
+      action [:enable, :start]
     end
 
     directory logdir do
       owner user
       group group
-      mode 0770
+      mode '0770'
       action :create
     end
 
-    directory "/etc/zookeeper" do
-      owner "zookeeper"
-      group "zookeeper"
-      mode 0770
+    directory '/etc/zookeeper' do
+      owner 'zookeeper'
+      group 'zookeeper'
+      mode '0770'
       action :create
     end
 
     directory datadir do
-      owner "zookeeper"
-      group "zookeeper"
-      mode 0700
+      owner 'zookeeper'
+      group 'zookeeper'
+      mode '0700'
       recursive true
       action :create
     end
 
-    template "/etc/zookeeper/zoo.cfg" do
-        source "zoo.cfg.erb"
-        owner "root"
-        group "root"
-        mode 0644
+    template '/etc/zookeeper/zoo.cfg' do
+        source 'zoo.cfg.erb'
+        owner 'root'
+        group 'root'
+        mode '0644'
         cookbook cbk_name
-        notifies :restart, "service[zookeeper]"
-        variables(:hosts => hosts, :data_dir => datadir, :port => port )
+        notifies :restart, 'service[zookeeper]'
+        variables(hosts: hosts, data_dir: datadir, port: port)
     end
 
-    template "/etc/zookeeper/log4j.properties" do
-        source "zookeeper_log4j.properties.erb"
-        owner "root"
-        group "root"
-        mode 0644
+    template '/etc/zookeeper/log4j.properties' do
+        source 'zookeeper_log4j.properties.erb'
+        owner 'root'
+        group 'root'
+        mode '0644'
         cookbook cbk_name
-        notifies :restart, "service[zookeeper]"
+        notifies :restart, 'service[zookeeper]'
     end
 
-    template "/etc/sysconfig/zookeeper" do
-      source "zookeeper_sysconfig.erb"
-      owner "root"
-      group "root"
-      mode 0644
+    template '/etc/sysconfig/zookeeper' do
+      source 'zookeeper_sysconfig.erb'
+      owner 'root'
+      group 'root'
+      mode '0644'
       cookbook cbk_name
-      variables(:memory => memory, :classpath => classpath, :zoomain => zoomain, :log4j => log4j, :jvmflags => jvmflags, :zoocfg => zoocfg)
-      notifies :restart, "service[zookeeper]"
+      variables(memory: memory, classpath: classpath, zoomain: zoomain, log4j: log4j, jvmflags: jvmflags, zoocfg: zoocfg)
+      notifies :restart, 'service[zookeeper]'
     end
 
-    #getting zk index
+    # getting zk index
     if hosts.include?(node.name)
       zk_index = hosts.index(node.name) + 1
     else
@@ -98,28 +96,28 @@ action :add do
     end
 
     template "#{datadir}/myid" do
-        source "zookeeper_myid.erb"
-        owner user
-        group group
-        mode 0644
-        cookbook cbk_name
-        retries 2
-        variables(:zk_index => zk_index )
-        notifies :restart, "service[zookeeper]"
-        #notifies :run, "execute[force_chef_client_wakeup]", :delayed
+      source 'zookeeper_myid.erb'
+      owner user
+      group group
+      mode '0644'
+      cookbook cbk_name
+      retries 2
+      variables(zk_index: zk_index )
+      notifies :restart, 'service[zookeeper]'
+      #notifies :run, "execute[force_chef_client_wakeup]", :delayed
     end
 
-    template "/etc/zookeeper.list" do
-      source "hosts.list.erb"
-      owner "root"
-      group "root"
-      mode 0644
+    template '/etc/zookeeper.list' do
+      source 'hosts.list.erb'
+      owner 'root'
+      group 'root'
+      mode '0644'
       cookbook cbk_name
-      variables(:hosts => hosts)
+      variables(hosts: hosts)
       #notifies :restart, "service[nmspd]", :delayed if manager_services["nmspd"]
       #notifies :restart, "service[nprobe]", :delayed if manager_services["nprobe"]
     end
-    Chef::Log.info("Zookeeper cookbook has been processed")
+    Chef::Log.info('Zookeeper cookbook has been processed')
   rescue => e
     Chef::Log.error(e.message)
   end
@@ -134,45 +132,35 @@ action :remove do
     group = new_resource.group
     ipaddress = new_resource.ipaddress
 
-    service "zookeeper" do
-      service_name "zookeeper"
-      supports :status => true, :stop => true
-      action [:disable,:stop]
+    service 'zookeeper' do
+      service_name 'zookeeper'
+      supports status: true, stop: true
+      action [:disable, :stop]
     end
 
-    dir_list = [
-      datadir,
-      logdir,
-      "/etc/zookeeper"
-    ]
+    dir_list = %w(datadir logdir /etc/zookeeper)
 
-    file_list = [
-      "/etc/zookeeper/zoo.cfg",
-      "/etc/zookeeper/log4j.properties",
-      "/etc/sysconfig/zookeeper",
-      "#{datadir}/myid",
-      "/etc/zookeeper.list"
-    ]
+    file_list = %w(/etc/zookeeper/zoo.cfg /etc/zookeeper/log4j.properties /etc/sysconfig/zookeeper "#{datadir}/myid" /etc/zookeeper.list)
 
-    #dir_list.each do |dir|
-    #  directory dir do
-    #    recursive true
-    #    action :delete
-    #  end
-    #end
+    # dir_list.each do |dir|
+    #   directory dir do
+    #     recursive true
+    #     action :delete
+    #   end
+    # end
 
-    #file_list.each do |file_tmp|
-    #  file file_tmp do
-    #    action :delete
-    #  end
-    #end
+    # file_list.each do |file_tmp|
+    #   file file_tmp do
+    #     action :delete
+    #   end
+    # end
 
-    ## removing package
-    #dnf_package 'zookeeper' do
-    #  action :remove
-    #end
+    # removing package
+    # dnf_package 'zookeeper' do
+    #   action :remove
+    # end
 
-    Chef::Log.info("Zookeeper cookbook has been processed")
+    Chef::Log.info('Zookeeper cookbook has been processed')
   rescue => e
     Chef::Log.error(e.message)
   end
@@ -182,12 +170,12 @@ action :register do
   ipaddress = new_resource.ipaddress
 
   begin
-    if !node["zookeeper"]["registered"]
+    if !node['zookeeper']['registered']
       query = {}
-        query["ID"] = "zookeeper-#{node["hostname"]}"
-        query["Name"] = "zookeeper"
-        query["Address"] = ipaddress
-        query["Port"] = 2181
+        query['ID'] = "zookeeper-#{node['hostname']}"
+        query['Name'] = 'zookeeper'
+        query['Address'] = ipaddress
+        query['Port'] = 2181
         json_query = Chef::JSONCompat.to_json(query)
 
         execute 'Register service in consul' do
@@ -195,10 +183,10 @@ action :register do
             action :nothing
         end.run_action(:run)
 
-        node.normal["zookeeper"]["registered"] = true
+        node.normal['zookeeper']['registered'] = true
     end
 
-    Chef::Log.info("Zookeeper service has been registered to consul")
+    Chef::Log.info('Zookeeper service has been registered to consul')
   rescue => e
     Chef::Log.error(e.message)
   end
@@ -208,15 +196,15 @@ action :deregister do
   ipaddress = new_resource.ipaddress
 
   begin
-    if node["zookeeper"]["registered"]
+    if node['zookeeper']['registered']
       execute 'Deregister service in consul' do
-        command "curl -X PUT http://localhost:8500/v1/agent/service/deregister/zookeeper-#{node["hostname"]} &>/dev/null"
+        command "curl -X PUT http://localhost:8500/v1/agent/service/deregister/zookeeper-#{node['hostname']} &>/dev/null"
         action :nothing
       end.run_action(:run)
 
-      node.normal["zookeeper"]["registered"] = false
+      node.normal['zookeeper']['registered'] = false
     end
   rescue => e
-    Chef::Log.info("Zookeeper has been deregistered to consul")
+    Chef::Log.info('Zookeeper has been deregistered to consul')
   end
 end
