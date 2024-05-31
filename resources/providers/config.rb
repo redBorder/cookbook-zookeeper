@@ -88,11 +88,7 @@ action :add do
     end
 
     # getting zk index
-    if hosts.include?(node.name)
-      zk_index = hosts.index(node.name) + 1
-    else
-      zk_index = 254
-    end
+    zk_index = hosts.include?(node.name) ? hosts.index(node.name) + 1 : 254
 
     template "#{datadir}/myid" do
       source 'zookeeper_myid.erb'
@@ -122,11 +118,8 @@ action :add do
   end
 end
 
-
 action :remove do
   begin
-    ipaddress = new_resource.ipaddress
-
     service 'zookeeper' do
       service_name 'zookeeper'
       supports status: true, stop: true
