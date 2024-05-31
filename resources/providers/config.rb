@@ -165,20 +165,20 @@ action :register do
   ipaddress = new_resource.ipaddress
 
   begin
-    if !node['zookeeper']['registered']
+    unless node['zookeeper']['registered']
       query = {}
-        query['ID'] = "zookeeper-#{node['hostname']}"
-        query['Name'] = 'zookeeper'
-        query['Address'] = ipaddress
-        query['Port'] = 2181
-        json_query = Chef::JSONCompat.to_json(query)
+      query['ID'] = "zookeeper-#{node['hostname']}"
+      query['Name'] = 'zookeeper'
+      query['Address'] = ipaddress
+      query['Port'] = 2181
+      json_query = Chef::JSONCompat.to_json(query)
 
-        execute 'Register service in consul' do
-            command "curl -X PUT http://localhost:8500/v1/agent/service/register -d '#{json_query}' &>/dev/null"
-            action :nothing
-        end.run_action(:run)
+      execute 'Register service in consul' do
+        command "curl -X PUT http://localhost:8500/v1/agent/service/register -d '#{json_query}' &>/dev/null"
+        action :nothing
+      end.run_action(:run)
 
-        node.normal['zookeeper']['registered'] = true
+      node.normal['zookeeper']['registered'] = true
     end
 
     Chef::Log.info('Zookeeper service has been registered to consul')
@@ -199,7 +199,9 @@ action :deregister do
 
       node.normal['zookeeper']['registered'] = false
     end
-  rescue => e
+
     Chef::Log.info('Zookeeper has been deregistered to consul')
+  rescue => e
+    Chef::Log.error(e.message)
   end
 end
