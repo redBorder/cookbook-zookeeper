@@ -97,7 +97,7 @@ action :add do
       mode '0644'
       cookbook cbk_name
       retries 2
-      variables(zk_index: zk_index )
+      variables(zk_index: zk_index)
       notifies :restart, 'service[zookeeper]'
       # notifies :run, "execute[force_chef_client_wakeup]", :delayed
     end
@@ -181,8 +181,6 @@ action :register do
 end
 
 action :deregister do
-  ipaddress = new_resource.ipaddress
-
   begin
     if node['zookeeper']['registered']
       execute 'Deregister service in consul' do
