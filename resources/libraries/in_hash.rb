@@ -1,13 +1,12 @@
 class Zookeeper
   class Helpers
     def in_hash?(hash, *keys)
-      if hash[keys.first] && keys.size == 1
-        return true
-      elsif hash[keys.first] && hash[keys.first].is_a?(Hash)
-        in_hash? hash[keys.first], *keys[1..keys.size - 1]
-      else
-        return false
+      current = hash
+      keys.each do |key|
+        return false unless current.is_a?(Hash) && current.key?(key)
+        current = current[key]
       end
+      true
     end
   end
 end
