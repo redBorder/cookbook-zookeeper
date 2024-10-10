@@ -1,9 +1,14 @@
 cookbook-zookeeper CHANGELOG
 ===============
 
+## 1.0.5
+
+  - Miguel Negrón
+    - [8ce8bae] Add pre and postun to clean the cookbook
+
 ## 1.0.4
 
-  - Miguel Negron
+  - Miguel Negrón
     - [ff8de08] Fix lint
     - [e10f142] lint providers && recipes
     - [a3fba59] lint in_hash library
