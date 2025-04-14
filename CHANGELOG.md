@@ -1,6 +1,12 @@
 cookbook-zookeeper CHANGELOG
 ===============
 
+## 1.1.0
+
+  - Miguel Alvarez
+    - [ebf6b79] Fix redborder rails zoo stats
+    - [6ec7f0c] Specify client addr to 0.0.0.0
+
 ## 1.0.5
 
   - Miguel Negrón
