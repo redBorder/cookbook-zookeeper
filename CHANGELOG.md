@@ -1,6 +1,11 @@
 cookbook-zookeeper CHANGELOG
 ===============
 
+## 1.1.1
+
+  - Rafael Gomez
+    - [ba25604] Add logrotate configuration for Zookeeper logs
+
 ## 1.1.0
 
   - Miguel Alvarez
