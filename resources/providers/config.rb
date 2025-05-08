@@ -112,6 +112,17 @@ action :add do
       # notifies :restart, "service[nmspd]", :delayed if manager_services["nmspd"]
       # notifies :restart, "service[nprobe]", :delayed if manager_services["nprobe"]
     end
+
+    template '/etc/logrotate.d/zookeeper' do
+      source 'zookeeper_log-rotate.erb'
+      owner 'root'
+      group 'root'
+      mode '0644'
+      retries 2
+      cookbook cbk_name
+      variables(logdir: logdir)
+    end
+
     Chef::Log.info('Zookeeper cookbook has been processed')
   rescue => e
     Chef::Log.error(e.message)
