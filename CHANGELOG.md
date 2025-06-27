@@ -1,6 +1,11 @@
 cookbook-zookeeper CHANGELOG
 ===============
 
+## 1.1.2
+
+  - nilsver
+    - [870ad64] remove flush cache
+
 ## 1.1.1
 
   - Rafael Gomez
