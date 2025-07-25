@@ -1,6 +1,11 @@
 cookbook-zookeeper CHANGELOG
 ===============
 
+## 1.1.3
+
+  - jnavarrorb
+    - [2112f27] Remove executable permissions on non-executable files
+
 ## 1.1.2
 
   - nilsver
