@@ -1,6 +1,11 @@
 cookbook-zookeeper CHANGELOG
 ===============
 
+## 1.1.4
+
+  - manegron
+    - [6561b3e] Upload cookbook only if opscode-erchef is active
+
 ## 1.1.3
 
   - jnavarrorb
