@@ -13,7 +13,7 @@ attribute :hosts, kind_of: Array, default: [node.name]
 attribute :port, kind_of: Integer, default: 2181
 attribute :memory, kind_of: Integer, default: 524288
 attribute :classpath, kind_of: String, default: ''
-attribute :log4j, kind_of: String, default: '-Dlog4j.configuration=file:///etc/zookeeper/log4j.properties'
+attribute :log4j, kind_of: String, default: '-Dlogback.configurationFile=/etc/zookeeper/logback.xml'
 attribute :jvmflags, kind_of: String, default: ''
 attribute :zoomain, kind_of: String, default: '-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.local.only=false org.apache.zookeeper.server.quorum.QuorumPeerMain'
 attribute :zoocfg, kind_of: String, default: '/etc/zookeeper/zoo.cfg'

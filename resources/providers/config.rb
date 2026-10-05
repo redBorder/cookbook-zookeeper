@@ -67,12 +67,13 @@ action :add do
       variables(hosts: hosts, data_dir: datadir, port: port)
     end
 
-    template '/etc/zookeeper/log4j.properties' do
-      source 'zookeeper_log4j.properties.erb'
+    template '/etc/zookeeper/logback.xml' do
+      source 'zookeeper_logback.xml.erb'
       owner 'root'
       group 'root'
       mode '0644'
       cookbook cbk_name
+      variables(logdir: logdir)
       notifies :restart, 'service[zookeeper]'
     end
 
