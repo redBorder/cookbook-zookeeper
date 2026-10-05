@@ -1,6 +1,14 @@
 cookbook-zookeeper CHANGELOG
 ===============
 
+## 1.1.5
+
+  - Miguel Negrón
+    - [386f2a6] Merge pull request #20 from redBorder/add_info_logs
+  - manegron
+    - [386f2a6] Merge pull request #20 from redBorder/add_info_logs
+    - [f9f4e61] Change log4j to logback.xml and logs in INFO mode
+
 ## 1.1.4
 
   - manegron
